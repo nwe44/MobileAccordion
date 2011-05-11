@@ -23,19 +23,25 @@ function (makeAccordion, container) {
     }
        
     function scrollToPosition(x,y){
-		if(y + window.innerHeight < $('body').height()){ // don't try to scroll somewhere you can't get to
-			var interval = setInterval(function(){
-		        if(window.scrollY < y - 1 ||  window.scrollY > y + 1 ){
-		            var halfWay = window.scrollY + 0.5 * (  y - window.scrollY);
-		            window.scrollTo(x, halfWay);
-		        }else{
-		            window.scrollTo(x, y); 
-		            clearInterval(interval);
-		        }
+			
+		var interval = setInterval(function(){
+		    if(window.scrollY < y - 1 ||  window.scrollY > y + 1 ){
+		            
+				var halfWay = window.scrollY + 0.5 * (  y - window.scrollY),
+				    o = window.scrollY;
+				
+				window.scrollTo(x, halfWay);
+				
+				// if we didn't move, we probably can't, so don't try
+				if(o === window.scrollY) { clearInterval(interval); }
+		            
+			}else{
+				window.scrollTo(x, y); 
+				clearInterval(interval);
+			}
 					
-			},50);
-		}       
-    }
+        },50);
+	}
     
     function slideUpSection($header) {
         var content = ($header.next())[0];
