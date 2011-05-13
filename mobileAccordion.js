@@ -1,15 +1,26 @@
 /*
 * A basic touch aware accordion, with tweaks for small screens
 * depends on emile and zepto (or jQuery if you must)
-* At the moment probably not compatible with things that 
-* rewrite the scrolling mechanism (ie. iScroll)
-* Some options to come, suggestions welcome
 *
 * usage:
 * 
 * $(document).ready(function () { 
 *    makeAccordion('#myElement', {scrollTo: true});
 * });
+*
+* Options 
+* ===========
+* headerSelector  -- Choose the tag to use for headers (default is h3)
+*
+* Callbacks:
+* ===========
+* slideDown       -- called at start of slide up animation
+* slideDownFinish -- called at end of slide down animation, 
+*                    receives the header (as a zepto object) of the element as an argument (useful for scrollTo positions)
+* slideUp         -- called at begining of slide up animation
+*                    receives the header (as a zepto object) of the closed element as an argument
+* slideUpFinish   -- called at end of slide up animation
+*                    receives the header (as a zepto object) of the closed element as an argument
 *
 * Copyright (c) 2011 Nick Evans
 * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
