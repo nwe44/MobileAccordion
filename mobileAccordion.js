@@ -57,7 +57,8 @@
           $content = $(content);
 
       //grab the "normal" height of the content
-      $content.show().css('-webkit-transition-duration', '0');
+      $content.show();
+      setTransitionDuration(content, 0);
       var mySectionHeight = $content.height();
       $content.css('height', "0px"); // reset the height ready for animation
       setTransitionDuration(content, 400);// set animation length -- TODO: make this time an option
