@@ -1,12 +1,10 @@
 /*
 * A basic touch aware accordion, with tweaks for small screens
-* depends on emile and zepto (or jQuery if you must)
+* depends on emile and zepto (or jQuery if you must).
 *
-* usage:
+* Usage:
 * 
-* $(document).ready(function () { 
-*    makeAccordion('#myElement', {scrollTo: true});
-* });
+* makeAccordion('#myElement', { slideDown: mySlideDownFunction });
 *
 * Options 
 * ===========
