@@ -25,7 +25,6 @@
 * Copyright (c) 2011 Nick Evans
 * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
 * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses. 
-*
 */
 (function (makeAccordion, container) {
 
@@ -41,15 +40,12 @@
             // Fire a callback, if any
             if(callback) { callback($header); }
             
-            $header.removeClass('zp-accordion-header-open');
-            
+            $header.removeClass('zp-accordion-header-open'); 
         });
-        
     }
     
    function slideDownSection($header, callback) {
 
-  
       var content = ($header.next())[0],
           $content = $(content);
 
@@ -63,11 +59,10 @@
           // Fire slideDown hook
         if(callback){ callback($header);}
 
-      } );
+      });
       
       // declare the accordion open
       $header.addClass('zp-accordion-header-open');
-
    }
     
    function parseAccordion(event, options) {
