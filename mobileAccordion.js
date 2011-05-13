@@ -1,6 +1,6 @@
 /*
 * A basic touch aware accordion, with tweaks for small screens
-* depends on emile and zepto (or jQuery if you must).
+* depends on zepto (or jQuery if you must).
 *
 * Usage:
 * 
@@ -32,32 +32,39 @@
     
     function slideUpSection($header, callback) {
         var content = ($header.next())[0];
-        emile(content, "height:0px", { duration: 400 }, function () {   
-            hideSection(content); 
+        $(content).css('height', '0');
+        var t = setTimeout( function () { 
+
+            hideSection(content);
+
+            $header.removeClass('zp-accordion-header-open');
+
+            if(callback){
+                callback($header); 
+            }
             
-            // Fire a callback, if any
-            if(callback) { callback($header); }
-            
-            $header.removeClass('zp-accordion-header-open'); 
-        });
+            }, 400 );
     }
-    
+    function setTransitionDuration(object, time){
+    	var props = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"];
+    	for(i = 0; i < props.length; i++){
+    		$(object).css(props[i], time + 'ms');
+    	}
+    }
    function slideDownSection($header, callback) {
 
       var content = ($header.next())[0],
           $content = $(content);
 
       //grab the "normal" height of the content
-      $content.show();
+      $content.show().css('-webkit-transition-duration', '0');
       var mySectionHeight = $content.height();
       $content.css('height', "0px"); // reset the height ready for animation
-      
-      //do the animation
-      emile( content , "height:" + mySectionHeight +"px", { duration: 400 }, function(){
-          // Fire slideDown hook
-        if(callback){ callback($header);}
-
-      });
+      setTransitionDuration(content, 400);// set animation length -- TODO: make this time an option
+      $content.css('height', mySectionHeight +"px"); // Open it, if you're wondering, height: auto doesn't work
+      if(callback){
+          var t=setTimeout(function(){ callback($header); },400);      
+      }
       
       // declare the accordion open
       $header.addClass('zp-accordion-header-open');
@@ -70,6 +77,7 @@
       scrollTo = options.scrollTo || false;
       //if section is open
       if ( $header.hasClass('zp-accordion-header-open') ) {
+         if(options.hasOwnProperty("slideUp")) {  options.slideUp(this); }
          slideUpSection($header, options.slideUpFinish);
       } else {
          //if section is shut
