@@ -16,7 +16,7 @@
 * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses. 
 *
 */
-function (makeAccordion, container) {
+(function (makeAccordion, container) {
 
     function hideSection(content) {
         $(content).hide().css('height', 'auto');
