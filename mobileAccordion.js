@@ -58,7 +58,7 @@
         $content = $(content);
 
         //grab the "normal" height of the content
-        $content.show();
+        $content.show().css('height', 'auto');
         setTransitionDuration(content, 0);
         var mySectionHeight = $content.height();
         $content.css('height', "0px"); // reset the height ready for animation
