@@ -19,6 +19,7 @@
 *                    receives the header (as a zepto object) of the closed element as an argument
 * slideUpFinish   -- called at end of slide up animation
 *                    receives the header (as a zepto object) of the closed element as an argument
+* slideFinish     -- fires at the end of all animation, no matter what
 *
 * Copyright (c) 2011 Nick Evans
 * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
@@ -94,7 +95,10 @@
         $header.siblings( '.zp-accordion-header-open' ).each( function () {
               if (options.hasOwnProperty("slideUp")) {  options.slideUp(this); }
             slideUpSection($(this),  options.slideUpFinish); 
-        });   
+        });
+        if(options.hasOwnProperty("slideFinish")){
+            var t = setTimeout(function () { options.slideFinish(); }, 400);
+        }
     }
   
    container[makeAccordion] = function (el, options) {
