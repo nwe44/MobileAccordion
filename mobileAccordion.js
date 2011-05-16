@@ -107,6 +107,7 @@
       // initialize functions
       $( el ).addClass( 'zp-accordion').children( headerSelector ).bind( 'click', function (event) { parseAccordion(event, options); }).addClass( 'zp-accordion-header');
       $( el ).children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
+      $( el ).('.zp-accordion-header-open').next().show();
    };
 
 })('makeAccordion', this);
