@@ -2,6 +2,7 @@
 * A basic touch aware accordion, with tweaks for small screens
 * depends on zepto (or jQuery if you must).
 *
+* v 0.2
 * Usage:
 *
 * makeAccordion('#myElement', { slideDown: mySlideDownFunction });
@@ -25,89 +26,104 @@
 * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
 * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 */
-(function (makeAccordion, container) {
-
-    function hideSection(content) {
+(function (window) {
+    
+    var mobileAccordion = function () {
+        return new mbAccordion();
+    };
+	var mbAccordion = function () {};
+	
+    mbAccordion.prototype.init = function (el, options){
+    	var that = this, headerSelector = options.headerSelector || 'h3';
+        this.options = options || {};
+        
+        // initialize functions
+        $( el ).addClass( 'zp-accordion').children( headerSelector ).unbind('click').bind( 'click', function (event) { 
+        that.parseAccordion(event); }).addClass( 'zp-accordion-header');
+        $( el ).children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
+        $( el ).find('.zp-accordion-header-open').next().show();
+    };
+    
+    mbAccordion.prototype.hideSection = function (content) {
         $(content).hide().css('height', 'auto');
-    }
+    };
 
-    function slideUpSection($header, callback) {
-        var content = ($header.next())[0];
+    mbAccordion.prototype.slideUpSection = function ($header) {
+    	var that = this,
+        content = ($header.next())[0];
         $(content).css('height', '0');
         var t = setTimeout(function () {
 
-            hideSection(content);
+            that.hideSection(content);
 
             $header.removeClass('zp-accordion-header-open');
 
-            if (callback) {
-                callback($header);
+            if (that.options.slideUpFinish) {
+                that.options.slideUpFinish($header);
             }
 
         }, 400);
-    }
-    function setTransitionDuration(object, time) {
+    };
+
+    mbAccordion.prototype.setTransitionDuration = function (object, time) {
         var props = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"];
         for (var i = 0; i < props.length; i++) {
             $(object).css(props[i], time + 'ms');
         }
-    }
-    function slideDownSection($header, callback) {
+    };
+
+    mbAccordion.prototype.slideDownSection = function ($header) {
 
         var content = ($header.next())[0],
-        $content = $(content);
+        $content = $(content),
+        that = this;
 
         //grab the "normal" height of the content
-        $content.show().css('height', 'auto');
-        setTransitionDuration(content, 0);
+        $content.show().css("height", "auto");
+        that.setTransitionDuration(content, 0);
         var mySectionHeight = $content.height();
         $content.css('height', "0px"); // reset the height ready for animation
-        setTransitionDuration(content, 400);// set animation length -- TODO: make this time an option
+        that.setTransitionDuration(content, 400);// set animation length -- TODO: make this time an option
         $content.css('height', mySectionHeight + "px"); // Open it, if you're wondering, height: auto doesn't work
-        if (callback) {
-            var t = setTimeout(function () { callback($header); }, 400);
+        if (that.options.slideDownFinish) {
+            var t = setTimeout(function (that) {
+                that.options.slideDownFinish($header); 
+                }, 400);
         }
 
         // declare the accordion open
         $header.addClass('zp-accordion-header-open');
-     }
+     };
 
-    function parseAccordion(event, options) {
-
+    mbAccordion.prototype.parseAccordion = function (event) {
+		var that = this;
         //cover our backs if some child element fires the event
-        var $header = $(event.target).hasClass('zp-accordion-header') ? $(event.target) : $(event.target).closest('.zp-accordion-header'),
-        scrollTo = options.scrollTo || false;
+        var $header = $(event.target).hasClass('zp-accordion-header') ? $(event.target) : $(event.target).closest('.zp-accordion-header');
+        
         //if section is open
         if ( $header.hasClass('zp-accordion-header-open') ) {
-           if (options.hasOwnProperty("slideUp")) {  options.slideUp(this); }
-           slideUpSection($header, options.slideUpFinish);
+           if (that.options.hasOwnProperty("slideUp")) {  that.options.slideUp(this); }
+           that.slideUpSection($header, that.options.slideUpFinish);
         } else {
            //if section is shut
            
            // Fire slideDown hook
-           if (options.hasOwnProperty("slideDown")) {  options.slideDown(); }
+           if (that.options.hasOwnProperty("slideDown")) {  that.options.slideDown(); }
            
-           slideDownSection($header, options.slideDownFinish);
+           that.slideDownSection($header);
            $header.parent().addClass('zp-accordion-open');
         }      
         
         //close others
         $header.siblings( '.zp-accordion-header-open' ).each( function () {
-              if (options.hasOwnProperty("slideUp")) {  options.slideUp(this); }
-            slideUpSection($(this),  options.slideUpFinish); 
+            if (that.options.hasOwnProperty("slideUp")) {  that.options.slideUp(this); }
+            that.slideUpSection($(this)); 
         });
-        if(options.hasOwnProperty("slideFinish")){
-            var t = setTimeout(function () { options.slideFinish(); }, 400);
+        if(that.options.hasOwnProperty("slideFinish")){
+            var t = setTimeout(function () { that.options.slideFinish(); }, 400);
         }
-    }
-  
-   container[makeAccordion] = function (el, options) {
-      options = options || {};
-      var headerSelector = options.headerSelector || 'h3';
-      // initialize functions
-      $( el ).addClass( 'zp-accordion').children( headerSelector ).bind( 'click', function (event) { parseAccordion(event, options); }).addClass( 'zp-accordion-header');
-      $( el ).children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
-      $( el ).('.zp-accordion-header-open').next().show();
-   };
+    };
 
-})('makeAccordion', this);
+  window.mobileAccordion = mobileAccordion;
+  
+})(window);
