@@ -46,7 +46,7 @@
         $( el ).addClass( 'zp-accordion');
         this.headers.bind( 'click', function (event) { 
             that.parseAccordion(event); }).addClass( 'zp-accordion-header');
-        this.content.children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
+        this.content.addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
         $( el ).find('.zp-accordion-header-open').next().show();
     };
     
