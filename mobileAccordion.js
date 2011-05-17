@@ -10,6 +10,7 @@
 * Options
 * ===========
 * headerSelector  -- Choose the tag to use for headers (default is h3)
+* transitionSpeed -- time (in ms) for all transitions
 *
 * Callbacks:
 * ===========
@@ -35,7 +36,8 @@
 	
     mbAccordion.prototype.init = function (el, options){
     	var that = this, headerSelector = options.headerSelector || 'h3';
-        this.options = options || {};
+        this.options = options || {},
+        this.options.transitionSpeed = this.options.transitionSpeed || 400;
         
         // initialize functions
         $( el ).addClass( 'zp-accordion').children( headerSelector ).unbind('click').bind( 'click', function (event) { 
@@ -62,7 +64,7 @@
                 that.options.slideUpFinish($header);
             }
 
-        }, 400);
+        }, this.options.transitionSpeed);
     };
 
     mbAccordion.prototype.setTransitionDuration = function (object, time) {
@@ -83,12 +85,12 @@
         that.setTransitionDuration(content, 0);
         var mySectionHeight = $content.height();
         $content.css('height', "0px"); // reset the height ready for animation
-        that.setTransitionDuration(content, 400);// set animation length -- TODO: make this time an option
+        that.setTransitionDuration(content, that.options.transitionSpeed);// set animation length
         $content.css('height', mySectionHeight + "px"); // Open it, if you're wondering, height: auto doesn't work
         if (that.options.slideDownFinish) {
             var t = setTimeout(function (that) {
                 that.options.slideDownFinish($header); 
-                }, 400);
+                }, that.options.transitionSpeed);
         }
 
         // declare the accordion open
@@ -120,7 +122,7 @@
             that.slideUpSection($(this)); 
         });
         if(that.options.hasOwnProperty("slideFinish")){
-            var t = setTimeout(function () { that.options.slideFinish(); }, 400);
+            var t = setTimeout(function () { that.options.slideFinish(); }, that.options.transitionSpeed);
         }
     };
 
