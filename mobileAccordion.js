@@ -44,6 +44,8 @@
         
         // initialize functions
         $( el ).addClass( 'zp-accordion');
+        
+        // using click event, rather than touchstart or anything else, see: http://www.quirksmode.org/presentations/USTourApril11/huge.pdf
         this.headers.bind( 'click', function (event) { 
             that.parseAccordion(event); }).addClass( 'zp-accordion-header');
         this.content.addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
