@@ -32,31 +32,35 @@
     var mobileAccordion = function () {
         return new mbAccordion();
     };
-	var mbAccordion = function () {};
-	
+    var mbAccordion = function () {};
+    
     mbAccordion.prototype.init = function (el, options){
-    	var that = this, headerSelector = options.headerSelector || 'h3';
-        this.options = options || {},
-        this.options.transitionSpeed = this.options.transitionSpeed || 400;
+        var that = this,
+        headerSelector = options.headerSelector || 'h3';
+        this.options = options || {};
+        this.options.transitionSpeed = options.transitionSpeed || 400;
+        this.headers = $( el ).children( headerSelector );
+        this.content = $( el ).children( 'div' );
         
         // initialize functions
-        $( el ).addClass( 'zp-accordion').children( headerSelector ).unbind('click').bind( 'click', function (event) { 
-        that.parseAccordion(event); }).addClass( 'zp-accordion-header');
-        $( el ).children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
+        $( el ).addClass( 'zp-accordion');
+        this.headers.bind( 'click', function (event) { 
+            that.parseAccordion(event); }).addClass( 'zp-accordion-header');
+        this.content.children( 'div' ).addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
         $( el ).find('.zp-accordion-header-open').next().show();
     };
     
-    mbAccordion.prototype.hideSection = function (content) {
-        $(content).hide().css('height', 'auto');
+    mbAccordion.prototype.hideSection = function (section) {
+        $(section).hide().css('height', 'auto');
     };
 
     mbAccordion.prototype.slideUpSection = function ($header) {
-    	var that = this,
-        content = ($header.next())[0];
-        $(content).css('height', '0');
+        var that = this,
+        section = ($header.next())[0];
+        $(section).css('height', '0');
         var t = setTimeout(function () {
 
-            that.hideSection(content);
+            that.hideSection(section);
 
             $header.removeClass('zp-accordion-header-open');
 
@@ -76,17 +80,17 @@
 
     mbAccordion.prototype.slideDownSection = function ($header) {
 
-        var content = ($header.next())[0],
-        $content = $(content),
+        var section = ($header.next())[0],
+        $section = $(section),
         that = this;
 
         //grab the "normal" height of the content
-        $content.show().css("height", "auto");
-        that.setTransitionDuration(content, 0);
-        var mySectionHeight = $content.height();
-        $content.css('height', "0px"); // reset the height ready for animation
-        that.setTransitionDuration(content, that.options.transitionSpeed);// set animation length
-        $content.css('height', mySectionHeight + "px"); // Open it, if you're wondering, height: auto doesn't work
+        $section.show().css("height", "auto");
+        that.setTransitionDuration(section, 0);
+        var mySectionHeight = $section.height();
+        $section.css('height', "0px"); // reset the height ready for animation
+        that.setTransitionDuration(section, that.options.transitionSpeed);// set animation length
+        $section.css('height', mySectionHeight + "px"); // Open it, if you're wondering, height: auto doesn't work
         if (that.options.slideDownFinish) {
             var t = setTimeout(function (that) {
                 that.options.slideDownFinish($header); 
@@ -97,8 +101,11 @@
         $header.addClass('zp-accordion-header-open');
      };
 
+    mbAccordion.prototype.destroy = function (event) {
+        this.headers.unbind('click').removeClass('zp-accordion-header-open').removeClass('zp-accordion-header');
+    };
     mbAccordion.prototype.parseAccordion = function (event) {
-		var that = this;
+        var that = this;
         //cover our backs if some child element fires the event
         var $header = $(event.target).hasClass('zp-accordion-header') ? $(event.target) : $(event.target).closest('.zp-accordion-header');
         
