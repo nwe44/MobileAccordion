@@ -43,7 +43,7 @@
         this.content = $( el ).children( 'div' );
         
         // initialize functions
-        $( el ).addClass( 'zp-accordion');
+        $( el ).addClass( 'zp-accordion' );
         
         // using click event, rather than touchstart or anything else, see: http://www.quirksmode.org/presentations/USTourApril11/huge.pdf
         this.headers.bind( 'click', function (event) { 
@@ -59,8 +59,8 @@
     mbAccordion.prototype.slideUpSection = function ($header) {
         var that = this,
         section = ($header.next())[0];
-        $(section).css('height', '0');
-        var t = setTimeout(function () {
+        $(section).css('height', '0')
+        t = setTimeout(function () {
 
             that.hideSection(section);
 
@@ -75,7 +75,7 @@
 
     mbAccordion.prototype.setTransitionDuration = function (object, time) {
         var props = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"];
-        for (var i = 0; i < props.length; i++) {
+        for (var i = 0, max = props.length; i < max; i += 1 ) {
             $(object).css(props[i], time + 'ms');
         }
     };
