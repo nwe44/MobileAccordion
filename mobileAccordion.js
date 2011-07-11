@@ -2,7 +2,7 @@
 * A basic touch aware accordion, with tweaks for small screens
 * depends on zepto (or jQuery if you must).
 *
-* v 0.2
+* v 0.3
 * Usage:
 *
 * makeAccordion('#myElement', { slideDown: mySlideDownFunction });
@@ -11,6 +11,7 @@
 * ===========
 * headerSelector  -- Choose the tag to use for headers (default is h3)
 * transitionSpeed -- time (in ms) for all transitions
+* firstOpen -- Is the first accordion element open? Defaults to false
 *
 * Callbacks:
 * ===========
@@ -39,6 +40,7 @@
         headerSelector = options.headerSelector || 'h3';
         this.options = options || {};
         this.options.transitionSpeed = options.transitionSpeed || 400;
+        this.options.firstOpen = options.firstOpen || false; // will the first element be open?
         this.headers = $( el ).children( headerSelector );
         this.content = $( el ).children( 'div' );
         
@@ -50,6 +52,9 @@
             that.parseAccordion(event); }).addClass( 'zp-accordion-header');
         this.content.addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
         $( el ).find('.zp-accordion-header-open').next().show();
+        if (this.options.firstOpen) {
+        	this.slideDownSection($(this.headers[0]));
+    	}
     };
     
     mbAccordion.prototype.hideSection = function (section) {
@@ -59,8 +64,8 @@
     mbAccordion.prototype.slideUpSection = function ($header) {
         var that = this,
         section = ($header.next())[0];
-        $(section).css('height', '0')
-        t = setTimeout(function () {
+        $(section).css('height', '0');
+        var t = setTimeout(function () {
 
             that.hideSection(section);
 
