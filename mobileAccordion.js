@@ -29,34 +29,35 @@
 * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 */
 (function (window) {
-    
+
     var mobileAccordion = function () {
         return new mbAccordion();
     };
     var mbAccordion = function () {};
-    
-    mbAccordion.prototype.init = function (el, options){
+
+    mbAccordion.prototype.init = function (el, options) {
         var that = this,
         headerSelector = options.headerSelector || 'h3';
         this.options = options || {};
         this.options.transitionSpeed = options.transitionSpeed || 400;
         this.options.firstOpen = options.firstOpen || false; // will the first element be open?
-        this.headers = $( el ).children( headerSelector );
-        this.content = $( el ).children( 'div' );
-        
+        this.headers = $(el).children(headerSelector);
+        this.content = $(el).children('div');
+
         // initialize functions
-        $( el ).addClass( 'zp-accordion' );
-        
+        $(el).addClass('zp-accordion');
+
         // using click event, rather than touchstart or anything else, see: http://www.quirksmode.org/presentations/USTourApril11/huge.pdf
-        this.headers.bind( 'click', function (event) { 
-            that.parseAccordion(event); }).addClass( 'zp-accordion-header');
-        this.content.addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
-        $( el ).find('.zp-accordion-header-open').next().show();
+        this.headers.bind('click', function (event) {
+            that.parseAccordion(event); 
+        }).addClass('zp-accordion-header');
+        this.content.addClass('zp-accordion-content').css('overflow', 'hidden').hide();
+        $(el).find('.zp-accordion-header-open').next().show();
         if (this.options.firstOpen) {
-        	this.parseAccordion({target : $(this.headers[0])});
-    	}
+            this.parseAccordion({target : $(this.headers[0])});
+        }
     };
-    
+
     mbAccordion.prototype.hideSection = function (section) {
         $(section).hide().css('height', 'auto');
     };
@@ -80,7 +81,7 @@
 
     mbAccordion.prototype.setTransitionDuration = function (object, time) {
         var props = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"];
-        for (var i = 0, max = props.length; i < max; i += 1 ) {
+        for (var i = 0, max = props.length; i < max; i += 1) {
             $(object).css(props[i], time + 'ms');
         }
     };
@@ -101,12 +102,12 @@
         if (that.options.slideDownFinish) {
             var t = setTimeout(function (that) {
                 that.options.slideDownFinish($header); 
-                }, that.options.transitionSpeed);
+            }, that.options.transitionSpeed);
         }
 
         // declare the accordion open
         $header.addClass('zp-accordion-header-open');
-     };
+    };
 
     mbAccordion.prototype.destroy = function (event) {
         this.headers.unbind('click').removeClass('zp-accordion-header-open').removeClass('zp-accordion-header');
@@ -115,31 +116,39 @@
         var that = this;
         //cover our backs if some child element fires the event
         var $header = $(event.target).hasClass('zp-accordion-header') ? $(event.target) : $(event.target).closest('.zp-accordion-header');
-        
+
         //if section is open
-        if ( $header.hasClass('zp-accordion-header-open') ) {
-           if (that.options.hasOwnProperty("slideUp")) {  that.options.slideUp(this); }
-           that.slideUpSection($header, that.options.slideUpFinish);
+        if ($header.hasClass('zp-accordion-header-open')) {
+            if (that.options.hasOwnProperty("slideUp")) {
+                that.options.slideUp(this);
+            }
+            that.slideUpSection($header, that.options.slideUpFinish);
         } else {
-           //if section is shut
-           
-           // Fire slideDown hook
-           if (that.options.hasOwnProperty("slideDown")) {  that.options.slideDown(); }
-           
-           that.slideDownSection($header);
-           $header.parent().addClass('zp-accordion-open');
-        }      
-        
+            //if section is shut
+
+            // Fire slideDown hook
+            if (that.options.hasOwnProperty("slideDown")) {
+                that.options.slideDown();
+            }
+
+            that.slideDownSection($header);
+            $header.parent().addClass('zp-accordion-open');
+        }
+
         //close others
-        $header.siblings( '.zp-accordion-header-open' ).each( function () {
-            if (that.options.hasOwnProperty("slideUp")) {  that.options.slideUp(this); }
-            that.slideUpSection($(this)); 
+        $header.siblings('.zp-accordion-header-open').each(function () {
+            if (that.options.hasOwnProperty("slideUp")) {
+                that.options.slideUp(this);
+            }
+            that.slideUpSection($(this));
         });
-        if(that.options.hasOwnProperty("slideFinish")){
-            var t = setTimeout(function () { that.options.slideFinish(); }, that.options.transitionSpeed);
+        if (that.options.hasOwnProperty("slideFinish")) {
+            var t = setTimeout(function () {
+                that.options.slideFinish();
+            }, that.options.transitionSpeed);
         }
     };
 
   window.mobileAccordion = mobileAccordion;
-  
+
 })(window);
