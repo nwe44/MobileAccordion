@@ -2,7 +2,7 @@
 * A basic touch aware accordion, with tweaks for small screens
 * depends on zepto (or jQuery if you must).
 *
-* v 0.3
+* v 0.4
 * Usage:
 *
 * makeAccordion('#myElement', { slideDown: mySlideDownFunction });
@@ -53,7 +53,7 @@
         this.content.addClass( 'zp-accordion-content').css('overflow', 'hidden').hide();
         $( el ).find('.zp-accordion-header-open').next().show();
         if (this.options.firstOpen) {
-        	this.slideDownSection($(this.headers[0]));
+        	this.parseAccordion({target : $(this.headers[0])});
     	}
     };
     
