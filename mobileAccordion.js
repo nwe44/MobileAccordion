@@ -49,7 +49,7 @@
 
         // using click event, rather than touchstart or anything else, see: http://www.quirksmode.org/presentations/USTourApril11/huge.pdf
         this.headers.bind('click', function (event) {
-            that.parseAccordion(event); 
+            that.parseAccordion(event);
         }).addClass('zp-accordion-header');
         this.content.addClass('zp-accordion-content').css('overflow', 'hidden').hide();
         $(el).find('.zp-accordion-header-open').next().show();
@@ -101,7 +101,7 @@
         $section.css('height', mySectionHeight + "px"); // Open it, if you're wondering, height: auto doesn't work
         if (that.options.slideDownFinish) {
             var t = setTimeout(function (that) {
-                that.options.slideDownFinish($header); 
+                that.options.slideDownFinish($header);
             }, that.options.transitionSpeed);
         }
 
